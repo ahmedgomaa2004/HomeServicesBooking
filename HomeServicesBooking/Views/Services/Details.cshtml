@@ -1,0 +1,19 @@
+@model ServiceDetailsViewModel
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="details-panel">
+            <a class="text-decoration-none d-inline-block mb-3" asp-controller="Services" asp-action="Index">العودة للخدمات</a>
+            <h1 class="mb-3">@Model.Name</h1>
+            <p class="lead text-muted">@Model.Description</p>
+            <div class="d-flex gap-2 mt-4">
+                <a class="btn btn-primary btn-lg" asp-controller="Orders" asp-action="Create" asp-route-serviceId="@Model.Id">احجز الخدمة</a>
+                <a class="btn btn-outline-secondary btn-lg" asp-controller="Home" asp-action="Index">الرئيسية</a>
+            </div>
+        </div>
+    </div>
+</div>

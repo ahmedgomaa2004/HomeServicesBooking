@@ -1,0 +1,75 @@
+@model HomeIndexViewModel
+
+@{
+    ViewData["Title"] = "الرئيسية";
+}
+
+<section class="hero-section mb-5">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <h1 class="display-5 fw-bold mb-3">احجز خدمة منزلية بسهولة</h1>
+            <p class="lead text-muted mb-4">
+                اختر الخدمة المناسبة، أرسل بياناتك، وسيتم تسجيل طلبك فورًا لمتابعته من فريق الإدارة.
+            </p>
+            <a class="btn btn-primary btn-lg" asp-controller="Services" asp-action="Index">استعرض الخدمات</a>
+        </div>
+        <div class="col-lg-5">
+            <div class="hero-panel">
+                <div class="hero-stat">
+                    <span class="hero-stat-number">@Model.Services.Count</span>
+                    <span class="hero-stat-label">خدمات متاحة الآن</span>
+                </div>
+                <p class="mb-0 text-muted">خدمة حجز بسيطة وواضحة بدون خطوات معقدة.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-5">
+    <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+        <h2 class="h3 mb-0">الخدمات المتاحة</h2>
+        <a class="btn btn-outline-primary" asp-controller="Services" asp-action="Index">كل الخدمات</a>
+    </div>
+
+    @if (Model.Services.Any())
+    {
+        <div class="row g-4">
+            @foreach (var service in Model.Services)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card service-card h-100">
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="h5 card-title">@service.Name</h3>
+                            <p class="card-text text-muted flex-grow-1">@service.Description</p>
+                            <div class="d-flex gap-2">
+                                <a class="btn btn-outline-secondary" asp-controller="Services" asp-action="Details" asp-route-id="@service.Id">التفاصيل</a>
+                                <a class="btn btn-primary" asp-controller="Orders" asp-action="Create" asp-route-serviceId="@service.Id">اطلب الآن</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            لا توجد خدمات متاحة حاليًا.
+        </div>
+    }
+</section>
+
+<section class="how-it-works mb-4">
+    <h2 class="h3 mb-3">طريقة الحجز</h2>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="step-box">اختر الخدمة</div>
+        </div>
+        <div class="col-md-4">
+            <div class="step-box">اكتب بيانات الحجز</div>
+        </div>
+        <div class="col-md-4">
+            <div class="step-box">يتم تسجيل الطلب</div>
+        </div>
+    </div>
+</section>

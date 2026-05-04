@@ -1,0 +1,67 @@
+@model OrderFormViewModel
+
+@{
+    ViewData["Title"] = "حجز خدمة";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+        <div class="form-panel">
+            <h1 class="h3 mb-2">حجز خدمة</h1>
+            <p class="text-muted mb-4">املأ البيانات التالية لتسجيل طلبك.</p>
+
+            @if (!string.IsNullOrWhiteSpace(Model.ServiceName))
+            {
+                <div class="alert alert-info" role="alert">
+                    الخدمة المختارة: <strong>@Model.ServiceName</strong>
+                </div>
+            }
+
+            <form asp-controller="Orders" asp-action="Create" method="post" novalidate>
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="CustomerName" class="form-label">الاسم</label>
+                    <input asp-for="CustomerName" class="form-control" autocomplete="name" />
+                    <span asp-validation-for="CustomerName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Phone" class="form-label">رقم الموبايل</label>
+                    <input asp-for="Phone" class="form-control" inputmode="numeric" autocomplete="tel" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Address" class="form-label">العنوان</label>
+                    <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ServiceId" class="form-label">نوع الخدمة</label>
+                    <select asp-for="ServiceId" asp-items="Model.Services" class="form-select">
+                        <option value="">اختر الخدمة</option>
+                    </select>
+                    <span asp-validation-for="ServiceId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="OrderDate" class="form-label">تاريخ الحجز</label>
+                    <input asp-for="OrderDate" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                    <span asp-validation-for="OrderDate" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">إرسال الطلب</button>
+                    <a class="btn btn-outline-secondary" asp-controller="Services" asp-action="Index">إلغاء</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

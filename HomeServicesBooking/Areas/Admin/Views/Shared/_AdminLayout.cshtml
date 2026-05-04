@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - لوحة التحكم</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-4">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-semibold" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">لوحة التحكم</a>
+                <div class="d-flex align-items-center gap-2">
+                    <a class="btn btn-outline-secondary btn-sm" asp-area="" asp-controller="Home" asp-action="Index">الموقع</a>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <form asp-area="Admin" asp-controller="Auth" asp-action="Logout" method="post" class="m-0">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-outline-danger btn-sm">تسجيل الخروج</button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container pb-4">
+        @RenderBody()
+    </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

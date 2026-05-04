@@ -1,0 +1,91 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  background: #f7f8fa;
+  color: #172033;
+  text-align: right;
+}
+
+.navbar {
+  background: #fff;
+}
+
+.hero-section,
+.details-panel,
+.form-panel {
+  background: #fff;
+  border: 1px solid #e6e8ee;
+  border-radius: 8px;
+  padding: 2rem;
+}
+
+.hero-panel {
+  background: #f2f6ff;
+  border: 1px solid #dbe6ff;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.hero-stat {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  margin-bottom: 1rem;
+}
+
+.hero-stat-number {
+  color: #0d6efd;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.hero-stat-label {
+  color: #495057;
+  font-weight: 600;
+}
+
+.service-card {
+  border-color: #e6e8ee;
+  border-radius: 8px;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.service-card:hover {
+  box-shadow: 0 .5rem 1.25rem rgba(23, 32, 51, .08);
+  transform: translateY(-2px);
+}
+
+.page-heading {
+  margin-bottom: 1.5rem;
+}
+
+.empty-state,
+.step-box {
+  background: #fff;
+  border: 1px solid #e6e8ee;
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.step-box {
+  font-weight: 600;
+  text-align: center;
+}
