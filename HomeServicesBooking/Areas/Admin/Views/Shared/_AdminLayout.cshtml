@@ -13,6 +13,8 @@
             <div class="container-fluid">
                 <a class="navbar-brand fw-semibold" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">لوحة التحكم</a>
                 <div class="d-flex align-items-center gap-2">
+                    <a class="btn btn-outline-secondary btn-sm" asp-area="Admin" asp-controller="Orders" asp-action="Index">الطلبات</a>
+                    <a class="btn btn-outline-secondary btn-sm" asp-area="Admin" asp-controller="Services" asp-action="Index">الخدمات</a>
                     <a class="btn btn-outline-secondary btn-sm" asp-area="" asp-controller="Home" asp-action="Index">الموقع</a>
                     @if (User.Identity?.IsAuthenticated == true)
                     {

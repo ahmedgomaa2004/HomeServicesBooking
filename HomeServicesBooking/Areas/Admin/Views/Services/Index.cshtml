@@ -1,0 +1,61 @@
+@model List<ServiceListItemViewModel>
+
+@{
+    ViewData["Title"] = "إدارة الخدمات";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">إدارة الخدمات</h1>
+    <a class="btn btn-primary" asp-area="Admin" asp-controller="Services" asp-action="Create">إضافة خدمة</a>
+</div>
+
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>الاسم</th>
+                    <th>الوصف</th>
+                    <th>الحالة</th>
+                    <th>تاريخ الإنشاء</th>
+                    <th>آخر تحديث</th>
+                    <th>إجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    var service = Model[i];
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@service.Name</td>
+                        <td>@(service.Description.Length > 80 ? service.Description.Substring(0, 80) + "..." : service.Description)</td>
+                        <td><span class="badge @service.IsActiveBadgeClass">@service.IsActiveDisplay</span></td>
+                        <td>@service.CreatedAt.ToString("yyyy-MM-dd")</td>
+                        <td>@(service.UpdatedAt.HasValue ? service.UpdatedAt.Value.ToString("yyyy-MM-dd") : "—")</td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-primary"
+                               asp-area="Admin" asp-controller="Services" asp-action="Edit"
+                               asp-route-id="@service.Id">تعديل</a>
+                            @if (service.IsActive)
+                            {
+                                <form asp-area="Admin" asp-controller="Services" asp-action="Deactivate"
+                                      asp-route-id="@service.Id" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('هل أنت متأكد من تعطيل هذه الخدمة؟')">تعطيل</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p class="text-muted">لا توجد خدمات حاليًا</p>
+}
