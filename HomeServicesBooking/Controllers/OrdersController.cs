@@ -83,7 +83,6 @@ public class OrdersController : Controller
         {
             _logger.LogError(ex, "Order save failed");
             ModelState.AddModelError(string.Empty, "حدث خطأ أثناء حفظ الطلب، يرجى المحاولة مرة أخرى");
-            TempData["ErrorMessage"] = "حدث خطأ أثناء حفظ الطلب، يرجى المحاولة مرة أخرى";
 
             await PopulateServicesAsync(model);
             model.ServiceName = selectedService?.Name;

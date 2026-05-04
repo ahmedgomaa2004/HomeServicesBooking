@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace HomeServicesBooking.Areas.Admin.Controllers;
 
@@ -14,11 +15,13 @@ namespace HomeServicesBooking.Areas.Admin.Controllers;
 public class AuthController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<AuthController> _logger;
     private readonly PasswordHasher<AdminUser> _passwordHasher = new();
 
-    public AuthController(ApplicationDbContext context)
+    public AuthController(ApplicationDbContext context, ILogger<AuthController> logger)
     {
         _context = context;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -47,6 +50,7 @@ public class AuthController : Controller
 
         if (admin is null || !IsPasswordValid(admin, model.Password))
         {
+            _logger.LogWarning("Failed login attempt for email: {Email}", model.Email);
             ModelState.AddModelError(string.Empty, "بيانات غير صحيحة");
             return View(model);
         }
@@ -62,7 +66,16 @@ public class AuthController : Controller
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var principal = new ClaimsPrincipal(identity);
 
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+        try
+        {
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "SignInAsync failed for email: {Email}", model.Email);
+            ModelState.AddModelError(string.Empty, "حدث خطأ أثناء تسجيل الدخول");
+            return View(model);
+        }
 
         return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
     }
@@ -71,7 +84,15 @@ public class AuthController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
-        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        try
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "SignOutAsync failed");
+        }
+
         return RedirectToAction("Login", "Auth", new { area = "Admin" });
     }
 
