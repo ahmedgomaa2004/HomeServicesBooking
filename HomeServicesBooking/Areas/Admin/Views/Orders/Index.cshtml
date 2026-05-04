@@ -37,6 +37,7 @@
                     <th>الخدمة</th>
                     <th>تاريخ الحجز</th>
                     <th>الحالة</th>
+                    <th>إجراءات</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,6 +53,11 @@
                         <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
                         <td>
                             <span class="badge @order.StatusBadgeClass">@order.Status</span>
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-primary"
+                               asp-area="Admin" asp-controller="Orders" asp-action="Details"
+                               asp-route-id="@order.Id">عرض التفاصيل</a>
                         </td>
                     </tr>
                 }

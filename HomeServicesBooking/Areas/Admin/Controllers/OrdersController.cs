@@ -3,6 +3,7 @@ using HomeServicesBooking.Models;
 using HomeServicesBooking.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace HomeServicesBooking.Areas.Admin.Controllers;
@@ -84,5 +85,81 @@ public class OrdersController : Controller
         };
 
         return View(viewModel);
+    }
+
+    public async Task<IActionResult> Details(int id)
+    {
+        var order = await _context.Orders
+            .AsNoTracking()
+            .Where(o => o.Id == id)
+            .Select(o => new OrderDetailsViewModel
+            {
+                Id = o.Id,
+                CustomerName = o.CustomerName,
+                Phone = o.Phone,
+                Address = o.Address,
+                ServiceName = o.ServiceName,
+                OrderDate = o.OrderDate,
+                Status = o.Status == OrderStatus.InProgress
+                    ? "In Progress"
+                    : o.Status.ToString(),
+                StatusBadgeClass = o.Status == OrderStatus.Pending
+                    ? "bg-warning text-dark"
+                    : o.Status == OrderStatus.InProgress
+                        ? "bg-info text-dark"
+                        : "bg-success",
+                CurrentStatusCode = o.Status.ToString(),
+                CreatedAt = o.CreatedAt,
+                UpdatedAt = o.UpdatedAt
+            })
+            .FirstOrDefaultAsync();
+
+        if (order is null)
+        {
+            return NotFound();
+        }
+
+        order.StatusOptions =
+        [
+            new() { Value = "Pending", Text = "Pending" },
+            new() { Value = "InProgress", Text = "In Progress" },
+            new() { Value = "Done", Text = "Done" }
+        ];
+
+        return View(order);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateStatus(int id, string status)
+    {
+        if (!Enum.TryParse<OrderStatus>(status, out var newStatus))
+        {
+            TempData["ErrorMessage"] = "قيمة الحالة غير صحيحة";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        var order = await _context.Orders.FindAsync(id);
+
+        if (order is null)
+        {
+            return NotFound();
+        }
+
+        try
+        {
+            order.Status = newStatus;
+            order.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "تم تحديث الحالة";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to update order {OrderId} status", id);
+            TempData["ErrorMessage"] = "حدث خطأ أثناء تحديث الحالة";
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
