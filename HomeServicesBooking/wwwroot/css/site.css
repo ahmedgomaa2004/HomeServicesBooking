@@ -89,3 +89,57 @@ body {
   font-weight: 600;
   text-align: center;
 }
+
+/* Admin styles */
+.admin-card {
+  background: #fff;
+  border: 1px solid #e6e8ee;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.admin-stat-card {
+  border-radius: 8px;
+  border: 1px solid #e6e8ee;
+}
+
+.admin-stat-card .stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.admin-stat-card .stat-label {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+/* Table improvements */
+.table thead th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Badge improvements */
+.badge {
+  font-weight: 500;
+  padding: 0.4em 0.7em;
+}
+
+/* Empty state improvement */
+.empty-state {
+  text-align: center;
+  padding: 2.5rem 1rem;
+}
+
+/* Validation summary styling */
+.validation-summary-errors {
+  background: #fff5f5;
+  border: 1px solid #f5c6cb;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.validation-summary-errors ul {
+  margin-bottom: 0;
+}

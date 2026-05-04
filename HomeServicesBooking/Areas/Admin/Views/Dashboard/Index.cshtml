@@ -8,26 +8,26 @@
 
 <div class="row g-3 mb-4">
     <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title text-muted">إجمالي الطلبات</h5>
-                <p class="display-6 fw-bold">@Model.TotalOrdersCount</p>
+        <div class="card admin-stat-card">
+            <div class="card-body text-center">
+                <div class="stat-number">@Model.TotalOrdersCount</div>
+                <div class="stat-label">إجمالي الطلبات</div>
             </div>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title text-muted">طلبات جديدة</h5>
-                <p class="display-6 fw-bold text-warning">@Model.PendingOrdersCount</p>
+        <div class="card admin-stat-card">
+            <div class="card-body text-center">
+                <div class="stat-number text-warning">@Model.PendingOrdersCount</div>
+                <div class="stat-label">طلبات جديدة</div>
             </div>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title text-muted">طلبات مكتملة</h5>
-                <p class="display-6 fw-bold text-success">@Model.DoneOrdersCount</p>
+        <div class="card admin-stat-card">
+            <div class="card-body text-center">
+                <div class="stat-number text-success">@Model.DoneOrdersCount</div>
+                <div class="stat-label">طلبات مكتملة</div>
             </div>
         </div>
     </div>
@@ -65,5 +65,5 @@
 }
 else
 {
-    <p class="text-muted">لا توجد طلبات حاليًا</p>
+    <div class="empty-state">لا توجد طلبات حاليًا</div>
 }
