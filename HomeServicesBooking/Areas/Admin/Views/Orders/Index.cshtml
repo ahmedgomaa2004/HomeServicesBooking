@@ -1,0 +1,96 @@
+@model OrdersListViewModel
+
+@{
+    ViewData["Title"] = "إدارة الطلبات";
+}
+
+<h1 class="h3 mb-4">إدارة الطلبات</h1>
+
+<form method="get" asp-area="Admin" asp-controller="Orders" asp-action="Index" class="row g-2 mb-4 align-items-end">
+    <div class="col-md-5">
+        <label class="form-label">بحث</label>
+        <input type="text" name="search" value="@Model.SearchTerm" class="form-control" placeholder="بحث بالاسم أو رقم الموبايل" />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">الحالة</label>
+        <select name="status" class="form-select">
+            <option value="All" selected="@(Model.StatusFilter == "All" || string.IsNullOrEmpty(Model.StatusFilter))">الكل</option>
+            <option value="Pending" selected="@(Model.StatusFilter == "Pending")">Pending</option>
+            <option value="InProgress" selected="@(Model.StatusFilter == "InProgress")">In Progress</option>
+            <option value="Done" selected="@(Model.StatusFilter == "Done")">Done</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary w-100">تصفية</button>
+    </div>
+</form>
+
+@if (Model.Orders.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>اسم العميل</th>
+                    <th>رقم الموبايل</th>
+                    <th>الخدمة</th>
+                    <th>تاريخ الحجز</th>
+                    <th>الحالة</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < Model.Orders.Count; i++)
+                {
+                    var order = Model.Orders[i];
+                    var rowNumber = (Model.CurrentPage - 1) * 10 + i + 1;
+                    <tr>
+                        <td>@rowNumber</td>
+                        <td>@order.CustomerName</td>
+                        <td>@order.Phone</td>
+                        <td>@order.ServiceName</td>
+                        <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            <span class="badge @order.StatusBadgeClass">@order.Status</span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    if (Model.TotalPages > 1)
+    {
+        <nav aria-label="صفحات الطلبات">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-area="Admin"
+                       asp-controller="Orders"
+                       asp-action="Index"
+                       asp-route-search="@Model.SearchTerm"
+                       asp-route-status="@Model.StatusFilter"
+                       asp-route-page="@(Model.CurrentPage - 1)">السابق</a>
+                </li>
+
+                <li class="page-item disabled">
+                    <span class="page-link">صفحة @Model.CurrentPage من @Model.TotalPages</span>
+                </li>
+
+                <li class="page-item @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-area="Admin"
+                       asp-controller="Orders"
+                       asp-action="Index"
+                       asp-route-search="@Model.SearchTerm"
+                       asp-route-status="@Model.StatusFilter"
+                       asp-route-page="@(Model.CurrentPage + 1)">التالي</a>
+                </li>
+            </ul>
+        </nav>
+    }
+}
+else
+{
+    <p class="text-muted">لا توجد طلبات مطابقة</p>
+}
