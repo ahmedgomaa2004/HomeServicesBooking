@@ -1,8 +1,69 @@
+@model DashboardViewModel
+
 @{
     ViewData["Title"] = "لوحة التحكم";
 }
 
-<div class="details-panel">
-    <h1 class="h3 mb-3">مرحبًا بك في لوحة التحكم</h1>
-    <p class="text-muted mb-0">تم تسجيل الدخول بنجاح. سيتم بناء لوحة التحكم الكاملة في المرحلة التالية.</p>
+<h1 class="h3 mb-4">لوحة التحكم</h1>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-muted">إجمالي الطلبات</h5>
+                <p class="display-6 fw-bold">@Model.TotalOrdersCount</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-muted">طلبات جديدة</h5>
+                <p class="display-6 fw-bold text-warning">@Model.PendingOrdersCount</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title text-muted">طلبات مكتملة</h5>
+                <p class="display-6 fw-bold text-success">@Model.DoneOrdersCount</p>
+            </div>
+        </div>
+    </div>
 </div>
+
+<h2 class="h5 mb-3">آخر 10 طلبات</h2>
+
+@if (Model.LatestOrders.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>اسم العميل</th>
+                    <th>الخدمة</th>
+                    <th>التاريخ</th>
+                    <th>الحالة</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model.LatestOrders)
+                {
+                    <tr>
+                        <td>@order.CustomerName</td>
+                        <td>@order.ServiceName</td>
+                        <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            <span class="badge @order.StatusBadgeClass">@order.Status</span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p class="text-muted">لا توجد طلبات حاليًا</p>
+}
