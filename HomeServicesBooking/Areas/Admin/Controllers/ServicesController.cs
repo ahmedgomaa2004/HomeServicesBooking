@@ -162,13 +162,47 @@ public class ServicesController : Controller
             service.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] = "تم حذف الخدمة بنجاح";
+            TempData["SuccessMessage"] = "تم تعطيل الخدمة بنجاح";
             return RedirectToAction(nameof(Index));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to deactivate service {ServiceId}", id);
-            TempData["ErrorMessage"] = "حدث خطأ أثناء حذف الخدمة";
+            TempData["ErrorMessage"] = "حدث خطأ أثناء تعطيل الخدمة";
+            return RedirectToAction(nameof(Index));
+        }
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Activate(int id)
+    {
+        var service = await _context.Services.FindAsync(id);
+
+        if (service is null)
+        {
+            return NotFound();
+        }
+
+        if (service.IsActive)
+        {
+            TempData["ErrorMessage"] = "الخدمة مفعّلة بالفعل";
+            return RedirectToAction(nameof(Index));
+        }
+
+        try
+        {
+            service.IsActive = true;
+            service.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "تم تفعيل الخدمة بنجاح";
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to activate service {ServiceId}", id);
+            TempData["ErrorMessage"] = "حدث خطأ أثناء تفعيل الخدمة";
             return RedirectToAction(nameof(Index));
         }
     }

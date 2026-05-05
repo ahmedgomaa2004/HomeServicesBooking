@@ -122,6 +122,18 @@
                                             </button>
                                         </form>
                                     }
+                                    else
+                                    {
+                                        <form asp-area="Admin" asp-controller="Services" asp-action="Activate"
+                                              asp-route-id="@service.Id" method="post" class="d-inline m-0">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-success"
+                                                    onclick="return confirm('هل أنت متأكد من تفعيل هذه الخدمة؟');">
+                                                <i class="bi bi-play-circle"></i>
+                                                تفعيل
+                                            </button>
+                                        </form>
+                                    }
                                 </div>
                             </td>
                         </tr>
