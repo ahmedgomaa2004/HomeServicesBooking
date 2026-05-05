@@ -2,33 +2,87 @@
 
 @{
     ViewData["Title"] = "الرئيسية";
+
+    string IconFor(string name) => name switch
+    {
+        var n when n.Contains("سباكة") => "bi-droplet-fill",
+        var n when n.Contains("كهرباء") => "bi-lightning-charge-fill",
+        var n when n.Contains("نجارة") => "bi-hammer",
+        var n when n.Contains("تكييف") => "bi-thermometer-half",
+        var n when n.Contains("دهان") => "bi-palette-fill",
+        var n when n.Contains("تنظيف") => "bi-stars",
+        _ => "bi-tools"
+    };
 }
 
-<section class="hero-section mb-5">
-    <div class="row align-items-center g-4">
-        <div class="col-lg-7">
-            <h1 class="display-5 fw-bold mb-3">احجز خدمة منزلية بسهولة</h1>
-            <p class="lead text-muted mb-4">
-                اختر الخدمة المناسبة، أرسل بياناتك، وسيتم تسجيل طلبك فورًا لمتابعته من فريق الإدارة.
-            </p>
-            <a class="btn btn-primary btn-lg" asp-controller="Services" asp-action="Index">استعرض الخدمات</a>
-        </div>
-        <div class="col-lg-5">
-            <div class="hero-panel">
-                <div class="hero-stat">
-                    <span class="hero-stat-number">@Model.Services.Count</span>
-                    <span class="hero-stat-label">خدمات متاحة الآن</span>
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <span class="hero-tagline">
+                    <i class="bi bi-shield-check me-1"></i>
+                    خدمات موثوقة وبأعلى جودة
+                </span>
+                <h1>
+                    خدمات منزلية <span class="accent">باحتراف</span><br />
+                    في متناول يدك
+                </h1>
+                <p class="lead">
+                    منصة متكاملة توفر لك أفضل الفنيين المتخصصين في الصيانة المنزلية.
+                    احجز بخطوات بسيطة، وتابع طلبك بكل سهولة.
+                </p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a class="btn btn-accent btn-lg" asp-controller="Orders" asp-action="Create">
+                        <i class="bi bi-calendar-plus"></i>
+                        احجز الآن
+                    </a>
+                    <a class="btn btn-lg" style="color:#fff;border:1px solid rgba(255,255,255,0.3);background:transparent;" asp-controller="Services" asp-action="Index">
+                        <i class="bi bi-grid"></i>
+                        استعرض الخدمات
+                    </a>
                 </div>
-                <p class="mb-0 text-muted">خدمة حجز بسيطة وواضحة بدون خطوات معقدة.</p>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="p-3 rounded-pro" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);">
+                            <i class="bi bi-grid-3x3-gap-fill d-block mb-2" style="color: var(--color-accent); font-size: 1.75rem;"></i>
+                            <div style="color:#fff;font-weight:700;font-size:1.5rem;">@Model.Services.Count</div>
+                            <div style="color:rgba(255,255,255,0.7);font-size:0.85rem;">خدمة متاحة</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 rounded-pro" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);">
+                            <i class="bi bi-people-fill d-block mb-2" style="color: var(--color-accent); font-size: 1.75rem;"></i>
+                            <div style="color:#fff;font-weight:700;font-size:1.5rem;">+1200</div>
+                            <div style="color:rgba(255,255,255,0.7);font-size:0.85rem;">عميل سعيد</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 rounded-pro" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);">
+                            <i class="bi bi-award-fill d-block mb-2" style="color: var(--color-accent); font-size: 1.75rem;"></i>
+                            <div style="color:#fff;font-weight:700;font-size:1.5rem;">+5</div>
+                            <div style="color:rgba(255,255,255,0.7);font-size:0.85rem;">سنوات خبرة</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 rounded-pro" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);">
+                            <i class="bi bi-clock-history d-block mb-2" style="color: var(--color-accent); font-size: 1.75rem;"></i>
+                            <div style="color:#fff;font-weight:700;font-size:1.5rem;">24/7</div>
+                            <div style="color:rgba(255,255,255,0.7);font-size:0.85rem;">دعم متواصل</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="mb-5">
-    <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
-        <h2 class="h3 mb-0">الخدمات المتاحة</h2>
-        <a class="btn btn-outline-primary" asp-controller="Services" asp-action="Index">كل الخدمات</a>
+<section class="container py-5">
+    <div class="section-heading text-center">
+        <div class="section-label">خدماتنا</div>
+        <h2>الخدمات المتاحة</h2>
+        <p class="mx-auto">مجموعة متكاملة من الخدمات المنزلية باحترافية عالية وأسعار مناسبة</p>
     </div>
 
     @if (Model.Services.Any())
@@ -37,14 +91,19 @@
             @foreach (var service in Model.Services)
             {
                 <div class="col-md-6 col-lg-4">
-                    <div class="card service-card h-100">
-                        <div class="card-body d-flex flex-column">
-                            <h3 class="h5 card-title">@service.Name</h3>
-                            <p class="card-text text-muted flex-grow-1">@service.Description</p>
-                            <div class="d-flex gap-2">
-                                <a class="btn btn-outline-secondary" asp-controller="Services" asp-action="Details" asp-route-id="@service.Id">التفاصيل</a>
-                                <a class="btn btn-primary" asp-controller="Orders" asp-action="Create" asp-route-serviceId="@service.Id">اطلب الآن</a>
-                            </div>
+                    <div class="service-card">
+                        <div class="service-icon"><i class="bi @IconFor(service.Name)"></i></div>
+                        <h3>@service.Name</h3>
+                        <p class="service-desc">@service.Description</p>
+                        <div class="service-actions">
+                            <a class="btn btn-outline-primary btn-sm" asp-controller="Services" asp-action="Details" asp-route-id="@service.Id">
+                                <i class="bi bi-info-circle"></i>
+                                التفاصيل
+                            </a>
+                            <a class="btn btn-primary btn-sm" asp-controller="Orders" asp-action="Create" asp-route-serviceId="@service.Id">
+                                <i class="bi bi-calendar-plus"></i>
+                                اطلب الآن
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -53,21 +112,94 @@
     }
     else
     {
-        <div class="empty-state">لا توجد خدمات متاحة حاليًا.</div>
+        <div class="empty-state-pro">
+            <i class="bi bi-inbox empty-icon"></i>
+            <h3>لا توجد خدمات متاحة حاليًا</h3>
+            <p>سيتم إضافة الخدمات قريبًا</p>
+        </div>
     }
 </section>
 
-<section class="how-it-works mb-4">
-    <h2 class="h3 mb-3">طريقة الحجز</h2>
-    <div class="row g-3">
+<section style="background: var(--bg-muted);">
+    <div class="container py-5">
+        <div class="section-heading text-center">
+            <div class="section-label">لماذا نحن؟</div>
+            <h2>ما يميزنا</h2>
+            <p class="mx-auto">نلتزم بتقديم أفضل الخدمات بأعلى معايير الجودة والاحتراف</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+                    <h3>سرعة في التنفيذ</h3>
+                    <p>نصل إليك في أقرب وقت ممكن بعد استلام طلبك</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-patch-check-fill"></i></div>
+                    <h3>جودة مضمونة</h3>
+                    <p>فنيون محترفون وأدوات حديثة لضمان أفضل النتائج</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-shield-lock-fill"></i></div>
+                    <h3>ضمان الخدمة</h3>
+                    <p>نضمن لك جودة العمل وإعادة الخدمة عند الحاجة</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-headset"></i></div>
+                    <h3>دعم متواصل</h3>
+                    <p>فريق دعم متاح طوال اليوم للرد على استفساراتك</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container py-5">
+    <div class="section-heading text-center">
+        <div class="section-label">طريقة الحجز</div>
+        <h2>كيف نعمل؟</h2>
+        <p class="mx-auto">ثلاث خطوات بسيطة للحصول على الخدمة</p>
+    </div>
+
+    <div class="row g-4">
         <div class="col-md-4">
-            <div class="step-box">اختر الخدمة</div>
+            <div class="step-card">
+                <div class="step-number">١</div>
+                <h3>اختر الخدمة</h3>
+                <p>تصفح الخدمات المتاحة واختر الخدمة المناسبة لك</p>
+            </div>
         </div>
         <div class="col-md-4">
-            <div class="step-box">اكتب بيانات الحجز</div>
+            <div class="step-card">
+                <div class="step-number">٢</div>
+                <h3>أرسل طلبك</h3>
+                <p>املأ النموذج ببياناتك وحدد التاريخ المناسب</p>
+            </div>
         </div>
         <div class="col-md-4">
-            <div class="step-box">يتم تسجيل الطلب</div>
+            <div class="step-card">
+                <div class="step-number">٣</div>
+                <h3>استلم الخدمة</h3>
+                <p>سيتواصل معك الفني في الوقت المحدد وينفذ الخدمة</p>
+            </div>
         </div>
+    </div>
+</section>
+
+<section class="container mb-5">
+    <div class="cta-section">
+        <h2>جاهز لتجربة خدماتنا؟</h2>
+        <p>احجز خدمتك الآن واحصل على أفضل خدمة منزلية باحتراف</p>
+        <a class="btn btn-accent btn-lg" asp-controller="Orders" asp-action="Create">
+            <i class="bi bi-calendar-plus"></i>
+            ابدأ الحجز الآن
+        </a>
     </div>
 </section>

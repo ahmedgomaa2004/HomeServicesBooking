@@ -5,34 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - لوحة التحكم</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/theme.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-4">
-            <div class="container-fluid">
-                <a class="navbar-brand fw-semibold" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">لوحة التحكم</a>
+    <div class="admin-wrapper">
+        <partial name="_AdminSidebar" />
+
+        <div class="admin-main">
+            <header class="admin-topbar">
                 <div class="d-flex align-items-center gap-2">
-                    <a class="btn btn-outline-secondary btn-sm" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">لوحة التحكم</a>
-                    <a class="btn btn-outline-secondary btn-sm" asp-area="Admin" asp-controller="Orders" asp-action="Index">الطلبات</a>
-                    <a class="btn btn-outline-secondary btn-sm" asp-area="Admin" asp-controller="Services" asp-action="Index">الخدمات</a>
-                    <a class="btn btn-outline-secondary btn-sm" asp-area="" asp-controller="Home" asp-action="Index">الموقع</a>
+                    <button class="sidebar-toggle" type="button" onclick="document.getElementById('adminSidebar').classList.toggle('open')">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <div class="topbar-title">@ViewData["Title"]</div>
+                </div>
+                <div class="topbar-actions">
                     @if (User.Identity?.IsAuthenticated == true)
                     {
+                        <span class="admin-user d-none d-md-inline-flex">
+                            <span class="avatar">@(User.Identity.Name?.Substring(0, 1).ToUpper() ?? "A")</span>
+                            <span>@User.Identity.Name</span>
+                        </span>
                         <form asp-area="Admin" asp-controller="Auth" asp-action="Logout" method="post" class="m-0">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-outline-danger btn-sm">تسجيل الخروج</button>
+                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-box-arrow-right"></i>
+                                تسجيل الخروج
+                            </button>
                         </form>
                     }
                 </div>
-            </div>
-        </nav>
-    </header>
+            </header>
 
-    <main class="container pb-4">
-        <partial name="_Alerts" />
-        @RenderBody()
-    </main>
+            <main class="admin-content">
+                <partial name="_Alerts" />
+                @RenderBody()
+            </main>
+        </div>
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

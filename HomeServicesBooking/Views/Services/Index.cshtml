@@ -2,34 +2,64 @@
 
 @{
     ViewData["Title"] = "الخدمات";
+
+    string IconFor(string name) => name switch
+    {
+        var n when n.Contains("سباكة") => "bi-droplet-fill",
+        var n when n.Contains("كهرباء") => "bi-lightning-charge-fill",
+        var n when n.Contains("نجارة") => "bi-hammer",
+        var n when n.Contains("تكييف") => "bi-thermometer-half",
+        var n when n.Contains("دهان") => "bi-palette-fill",
+        var n when n.Contains("تنظيف") => "bi-stars",
+        _ => "bi-tools"
+    };
 }
 
-<div class="page-heading">
-    <h1>الخدمات</h1>
-    <p class="text-muted">اختر الخدمة التي تحتاجها وابدأ طلب الحجز مباشرة.</p>
-</div>
+<div class="container py-4">
+    <nav class="breadcrumb-pro">
+        <a asp-controller="Home" asp-action="Index"><i class="bi bi-house-door"></i> الرئيسية</a>
+        <span class="separator"><i class="bi bi-chevron-left"></i></span>
+        <span>الخدمات</span>
+    </nav>
 
-@if (Model.Any())
-{
-    <div class="row g-4">
-        @foreach (var service in Model)
-        {
-            <div class="col-md-6 col-lg-4">
-                <div class="card service-card h-100">
-                    <div class="card-body d-flex flex-column">
-                        <h2 class="h5 card-title">@service.Name</h2>
-                        <p class="card-text text-muted flex-grow-1">@service.Description</p>
-                        <div class="d-flex gap-2">
-                            <a class="btn btn-outline-secondary" asp-controller="Services" asp-action="Details" asp-route-id="@service.Id">عرض التفاصيل</a>
-                            <a class="btn btn-primary" asp-controller="Orders" asp-action="Create" asp-route-serviceId="@service.Id">احجز الخدمة</a>
+    <div class="page-header">
+        <div>
+            <h1>جميع الخدمات</h1>
+            <div class="page-subtitle">اختر الخدمة التي تحتاجها وابدأ طلب الحجز مباشرة</div>
+        </div>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="row g-4">
+            @foreach (var service in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card">
+                        <div class="service-icon"><i class="bi @IconFor(service.Name)"></i></div>
+                        <h3>@service.Name</h3>
+                        <p class="service-desc">@service.Description</p>
+                        <div class="service-actions">
+                            <a class="btn btn-outline-primary btn-sm" asp-controller="Services" asp-action="Details" asp-route-id="@service.Id">
+                                <i class="bi bi-info-circle"></i>
+                                عرض التفاصيل
+                            </a>
+                            <a class="btn btn-primary btn-sm" asp-controller="Orders" asp-action="Create" asp-route-serviceId="@service.Id">
+                                <i class="bi bi-calendar-plus"></i>
+                                احجز الخدمة
+                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-}
-else
-{
-    <div class="empty-state">لا توجد خدمات متاحة حاليًا.</div>
-}
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-state-pro">
+            <i class="bi bi-inbox empty-icon"></i>
+            <h3>لا توجد خدمات متاحة حاليًا</h3>
+            <p>سيتم إضافة الخدمات قريبًا</p>
+        </div>
+    }
+</div>

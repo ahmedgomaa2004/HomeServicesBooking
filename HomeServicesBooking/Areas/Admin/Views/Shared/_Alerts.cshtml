@@ -1,7 +1,8 @@
 @if (TempData["SuccessMessage"] is string successMessage)
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        @successMessage
+        <i class="bi bi-check-circle-fill"></i>
+        <div class="alert-content">@successMessage</div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="إغلاق"></button>
     </div>
 }
@@ -9,7 +10,8 @@
 @if (TempData["ErrorMessage"] is string errorMessage)
 {
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        @errorMessage
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <div class="alert-content">@errorMessage</div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="إغلاق"></button>
     </div>
 }

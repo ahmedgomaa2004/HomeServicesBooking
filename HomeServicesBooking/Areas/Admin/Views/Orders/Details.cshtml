@@ -2,73 +2,155 @@
 
 @{
     ViewData["Title"] = $"تفاصيل الطلب #{Model.Id}";
+
+    string StatusClass(string s) => s switch
+    {
+        "Pending" => "badge-status badge-pending",
+        "In Progress" => "badge-status badge-progress",
+        "Done" => "badge-status badge-done",
+        _ => "badge-status badge-inactive"
+    };
+
+    string StatusArabic(string s) => s switch
+    {
+        "Pending" => "جديد",
+        "In Progress" => "قيد التنفيذ",
+        "Done" => "مكتمل",
+        _ => s
+    };
 }
 
-<h1 class="h3 mb-4">تفاصيل الطلب #@Model.Id</h1>
+<nav class="breadcrumb-pro">
+    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index"><i class="bi bi-speedometer2"></i> لوحة التحكم</a>
+    <span class="separator"><i class="bi bi-chevron-left"></i></span>
+    <a asp-area="Admin" asp-controller="Orders" asp-action="Index">الطلبات</a>
+    <span class="separator"><i class="bi bi-chevron-left"></i></span>
+    <span>#@Model.Id</span>
+</nav>
 
-<div class="row">
+<div class="page-header">
+    <div>
+        <h1>تفاصيل الطلب <span class="text-accent">#@Model.Id</span></h1>
+        <div class="page-subtitle">
+            <span class="badge @StatusClass(Model.Status) me-2">@StatusArabic(Model.Status)</span>
+            تم الإنشاء: @Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")
+        </div>
+    </div>
+    <div>
+        <a class="btn btn-outline-secondary" asp-area="Admin" asp-controller="Orders" asp-action="Index">
+            <i class="bi bi-arrow-right"></i>
+            رجوع للقائمة
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
     <div class="col-lg-8">
-        <div class="card admin-card mb-4">
-            <div class="card-body">
-                <h5 class="card-title mb-3">بيانات الطلب</h5>
-                <dl class="row mb-0">
-                    <dt class="col-sm-4">اسم العميل</dt>
-                    <dd class="col-sm-8">@Model.CustomerName</dd>
-
-                    <dt class="col-sm-4">رقم الموبايل</dt>
-                    <dd class="col-sm-8">@Model.Phone</dd>
-
-                    <dt class="col-sm-4">العنوان</dt>
-                    <dd class="col-sm-8">@Model.Address</dd>
-
-                    <dt class="col-sm-4">الخدمة</dt>
-                    <dd class="col-sm-8">@Model.ServiceName</dd>
-
-                    <dt class="col-sm-4">تاريخ الحجز</dt>
-                    <dd class="col-sm-8">@Model.OrderDate.ToString("yyyy-MM-dd")</dd>
-
-                    <dt class="col-sm-4">الحالة</dt>
-                    <dd class="col-sm-8">
-                        <span class="badge @Model.StatusBadgeClass">@Model.Status</span>
-                    </dd>
-
-                    <dt class="col-sm-4">تاريخ الإنشاء</dt>
-                    <dd class="col-sm-8">@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</dd>
-
-                    @if (Model.UpdatedAt.HasValue)
-                    {
-                        <dt class="col-sm-4">آخر تحديث</dt>
-                        <dd class="col-sm-8">@Model.UpdatedAt.Value.ToString("yyyy-MM-dd HH:mm")</dd>
-                    }
+        <div class="card-pro mb-4">
+            <div class="card-pro-header">
+                <h3><i class="bi bi-person-circle me-2 text-accent"></i>بيانات العميل</h3>
+            </div>
+            <div class="card-pro-body">
+                <dl class="dl-pro">
+                    <div>
+                        <dt><i class="bi bi-person me-1"></i>اسم العميل</dt>
+                        <dd>@Model.CustomerName</dd>
+                    </div>
+                    <div>
+                        <dt><i class="bi bi-telephone me-1"></i>رقم الموبايل</dt>
+                        <dd><a href="tel:@Model.Phone" style="color: var(--color-primary);">@Model.Phone</a></dd>
+                    </div>
+                    <div>
+                        <dt><i class="bi bi-geo-alt me-1"></i>العنوان</dt>
+                        <dd>@Model.Address</dd>
+                    </div>
                 </dl>
             </div>
         </div>
 
-        <div class="card admin-card">
-            <div class="card-body">
-                <h5 class="card-title mb-3">تغيير الحالة</h5>
-                <form asp-area="Admin" asp-controller="Orders" asp-action="UpdateStatus" asp-route-id="@Model.Id" method="post">
-                    @Html.AntiForgeryToken()
-                    <div class="row align-items-end">
-                        <div class="col-sm-6">
-                            <label class="form-label">الحالة الجديدة</label>
-                            <select name="status" class="form-select">
-                                @foreach (var option in Model.StatusOptions)
-                                {
-                                    <option value="@option.Value" selected="@(option.Value == Model.CurrentStatusCode)">@option.Text</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="col-sm-6">
-                            <button type="submit" class="btn btn-primary">تحديث الحالة</button>
-                        </div>
+        <div class="card-pro">
+            <div class="card-pro-header">
+                <h3><i class="bi bi-clipboard-check me-2 text-accent"></i>تفاصيل الحجز</h3>
+            </div>
+            <div class="card-pro-body">
+                <dl class="dl-pro">
+                    <div>
+                        <dt><i class="bi bi-tools me-1"></i>الخدمة</dt>
+                        <dd><strong>@Model.ServiceName</strong></dd>
                     </div>
-                </form>
+                    <div>
+                        <dt><i class="bi bi-calendar3 me-1"></i>تاريخ الحجز</dt>
+                        <dd>@Model.OrderDate.ToString("yyyy-MM-dd")</dd>
+                    </div>
+                    <div>
+                        <dt><i class="bi bi-plus-circle me-1"></i>تاريخ الإنشاء</dt>
+                        <dd>@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</dd>
+                    </div>
+                    @if (Model.UpdatedAt.HasValue)
+                    {
+                        <div>
+                            <dt><i class="bi bi-arrow-clockwise me-1"></i>آخر تحديث</dt>
+                            <dd>@Model.UpdatedAt.Value.ToString("yyyy-MM-dd HH:mm")</dd>
+                        </div>
+                    }
+                </dl>
             </div>
         </div>
     </div>
-</div>
 
-<div class="mt-3">
-    <a class="btn btn-outline-secondary" asp-area="Admin" asp-controller="Orders" asp-action="Index">رجوع لإدارة الطلبات</a>
+    <div class="col-lg-4">
+        <div class="card-pro mb-4">
+            <div class="card-pro-header">
+                <h3><i class="bi bi-arrow-repeat me-2 text-accent"></i>تغيير الحالة</h3>
+            </div>
+            <div class="card-pro-body">
+                <div class="mb-3">
+                    <small class="text-muted d-block mb-1">الحالة الحالية</small>
+                    <span class="badge @StatusClass(Model.Status)" style="font-size: 0.85rem;">@StatusArabic(Model.Status)</span>
+                </div>
+
+                <form asp-area="Admin" asp-controller="Orders" asp-action="UpdateStatus" asp-route-id="@Model.Id" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        <label class="form-label">الحالة الجديدة</label>
+                        <select name="status" class="form-select">
+                            @foreach (var option in Model.StatusOptions)
+                            {
+                                <option value="@option.Value" selected="@(option.Value == Model.CurrentStatusCode)">@option.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-check2"></i>
+                        تحديث الحالة
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card-pro">
+            <div class="card-pro-header">
+                <h3><i class="bi bi-clock-history me-2 text-accent"></i>المسار الزمني</h3>
+            </div>
+            <div class="card-pro-body" style="font-size: 0.9rem;">
+                <div class="d-flex align-items-start gap-2 mb-3">
+                    <i class="bi bi-plus-circle-fill text-success mt-1"></i>
+                    <div>
+                        <div style="font-weight:600;">تم استلام الطلب</div>
+                        <small class="text-muted">@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</small>
+                    </div>
+                </div>
+                @if (Model.UpdatedAt.HasValue)
+                {
+                    <div class="d-flex align-items-start gap-2">
+                        <i class="bi bi-arrow-clockwise mt-1" style="color: var(--color-info);"></i>
+                        <div>
+                            <div style="font-weight:600;">آخر تحديث للحالة</div>
+                            <small class="text-muted">@Model.UpdatedAt.Value.ToString("yyyy-MM-dd HH:mm")</small>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>

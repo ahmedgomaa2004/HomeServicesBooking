@@ -1,37 +1,157 @@
 @model LoginViewModel
 
 @{
+    Layout = null;
     ViewData["Title"] = "تسجيل الدخول";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-7 col-lg-5">
-        <div class="form-panel">
-            <h1 class="h3 mb-2">تسجيل دخول الأدمن</h1>
-            <p class="text-muted mb-4">أدخل بيانات الدخول للوصول إلى لوحة التحكم.</p>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تسجيل الدخول - لوحة التحكم</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/theme.css" asp-append-version="true" />
+    <style>
+        .auth-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            padding: 2rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(201, 169, 97, 0.15), transparent 50%),
+                        radial-gradient(circle at 70% 70%, rgba(201, 169, 97, 0.1), transparent 50%);
+        }
+
+        .auth-card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            width: 100%;
+            max-width: 440px;
+            padding: 2.5rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-brand {
+            text-align: center;
+            margin-bottom: 1.75rem;
+        }
+
+        .auth-brand .brand-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            color: var(--color-accent);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .auth-brand h1 {
+            font-size: 1.4rem;
+            margin-bottom: 0.25rem;
+            color: var(--color-primary);
+        }
+
+        .auth-brand p {
+            color: var(--color-neutral-500);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--color-neutral-500);
+            font-size: 0.85rem;
+        }
+
+        .back-home-link {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.5rem 0.85rem;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            z-index: 2;
+        }
+
+        .back-home-link:hover { color: #fff; background: rgba(255, 255, 255, 0.12); }
+    </style>
+</head>
+<body>
+    <div class="auth-wrapper">
+        <a class="back-home-link" asp-area="" asp-controller="Home" asp-action="Index">
+            <i class="bi bi-arrow-left"></i>
+            العودة للموقع
+        </a>
+
+        <div class="auth-card">
+            <div class="auth-brand">
+                <span class="brand-icon"><i class="bi bi-shield-lock-fill"></i></span>
+                <h1>لوحة التحكم</h1>
+                <p>أدخل بيانات الدخول للوصول إلى النظام</p>
+            </div>
 
             <form asp-area="Admin" asp-controller="Auth" asp-action="Login" method="post" novalidate>
                 @Html.AntiForgeryToken()
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
 
                 <div class="mb-3">
-                    <label asp-for="Email" class="form-label">البريد الإلكتروني</label>
-                    <input asp-for="Email" class="form-control" autocomplete="username" />
+                    <label asp-for="Email" class="form-label">
+                        <i class="bi bi-envelope me-1 text-accent"></i>البريد الإلكتروني
+                    </label>
+                    <input asp-for="Email" class="form-control form-control-lg" autocomplete="username" placeholder="admin@site.com" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
 
                 <div class="mb-4">
-                    <label asp-for="Password" class="form-label">كلمة المرور</label>
-                    <input asp-for="Password" class="form-control" type="password" autocomplete="current-password" />
+                    <label asp-for="Password" class="form-label">
+                        <i class="bi bi-lock me-1 text-accent"></i>كلمة المرور
+                    </label>
+                    <input asp-for="Password" class="form-control form-control-lg" type="password" autocomplete="current-password" placeholder="••••••••" />
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100">تسجيل الدخول</button>
+                <button type="submit" class="btn btn-primary btn-lg w-100">
+                    <i class="bi bi-box-arrow-in-left"></i>
+                    تسجيل الدخول
+                </button>
             </form>
+
+            <div class="auth-footer">
+                <i class="bi bi-info-circle me-1"></i>
+                هذا الوصول مخصص لمسؤولي النظام فقط
+            </div>
         </div>
     </div>
-</div>
 
-@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <partial name="_ValidationScriptsPartial" />
-}
+</body>
+</html>

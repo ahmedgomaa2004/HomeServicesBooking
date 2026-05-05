@@ -5,43 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - خدمات منزلية</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/theme.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/HomeServicesBooking.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand fw-semibold" asp-area="" asp-controller="Home" asp-action="Index">خدمات منزلية</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">الرئيسية</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Services" asp-action="Index">الخدمات</a>
-                        </li>
-                    </ul>
+    <header class="public-navbar">
+        <nav class="container navbar navbar-expand-lg p-0">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <span class="brand-icon"><i class="bi bi-house-heart-fill"></i></span>
+                <span>خدمات منزلية</span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-expanded="false">
+                <i class="bi bi-list fs-3"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-house-door me-1"></i>الرئيسية
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Services" asp-action="Index">
+                            <i class="bi bi-grid me-1"></i>الخدمات
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex gap-2">
+                    <a class="btn btn-accent btn-sm" asp-area="" asp-controller="Orders" asp-action="Create">
+                        <i class="bi bi-calendar-plus"></i>
+                        احجز الآن
+                    </a>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @await Html.PartialAsync("_Alerts")
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted text-center pt-3 pb-3">
+    <main role="main">
+        <div class="container pt-3">
+            @await Html.PartialAsync("_Alerts")
+        </div>
+        @RenderBody()
+    </main>
+
+    <footer class="public-footer">
         <div class="container">
-            &copy; 2026 - خدمات منزلية
+            <div class="row g-4">
+                <div class="col-md-5">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="brand-icon" style="width:36px;height:36px;border-radius:6px;background:rgba(201,169,97,0.15);color:var(--color-accent);display:inline-flex;align-items:center;justify-content:center;font-size:1.1rem;">
+                            <i class="bi bi-house-heart-fill"></i>
+                        </span>
+                        <strong class="text-white fs-5">خدمات منزلية</strong>
+                    </div>
+                    <p class="mb-0" style="color: rgba(255,255,255,0.6); font-size: 0.92rem;">
+                        منصة متكاملة لحجز خدمات الصيانة المنزلية باحتراف وجودة عالية. نوفر لك أفضل الفنيين المتخصصين في كافة المجالات.
+                    </p>
+                </div>
+                <div class="col-md-3 col-6">
+                    <h5>روابط سريعة</h5>
+                    <a asp-area="" asp-controller="Home" asp-action="Index">الرئيسية</a><br />
+                    <a asp-area="" asp-controller="Services" asp-action="Index">كل الخدمات</a><br />
+                    <a asp-area="" asp-controller="Orders" asp-action="Create">احجز الآن</a>
+                </div>
+                <div class="col-md-4">
+                    <h5>تواصل معنا</h5>
+                    <div style="color: rgba(255,255,255,0.65); font-size: 0.9rem;">
+                        <div class="mb-2"><i class="bi bi-envelope me-2"></i>info@homeservices.sa</div>
+                        <div class="mb-2"><i class="bi bi-telephone me-2"></i>+966 50 000 0000</div>
+                        <div><i class="bi bi-geo-alt me-2"></i>الرياض، المملكة العربية السعودية</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 خدمات منزلية — جميع الحقوق محفوظة
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

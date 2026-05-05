@@ -2,60 +2,144 @@
 
 @{
     ViewData["Title"] = "إدارة الخدمات";
+
+    var activeCount = Model.Count(s => s.IsActive);
+    var inactiveCount = Model.Count - activeCount;
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3 mb-0">إدارة الخدمات</h1>
-    <a class="btn btn-primary" asp-area="Admin" asp-controller="Services" asp-action="Create">إضافة خدمة</a>
+<div class="page-header">
+    <div>
+        <h1>إدارة الخدمات</h1>
+        <div class="page-subtitle">إضافة، تعديل، وتعطيل الخدمات المتاحة في الموقع</div>
+    </div>
+    <div>
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="Services" asp-action="Create">
+            <i class="bi bi-plus-lg"></i>
+            إضافة خدمة جديدة
+        </a>
+    </div>
 </div>
 
 @if (Model.Any())
 {
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle">
-            <thead class="table-light">
-                <tr>
-                    <th>#</th>
-                    <th>الاسم</th>
-                    <th>الوصف</th>
-                    <th>الحالة</th>
-                    <th>تاريخ الإنشاء</th>
-                    <th>آخر تحديث</th>
-                    <th>إجراءات</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (var i = 0; i < Model.Count; i++)
-                {
-                    var service = Model[i];
-                    <tr>
-                        <td>@(i + 1)</td>
-                        <td>@service.Name</td>
-                        <td>@(service.Description.Length > 80 ? service.Description.Substring(0, 80) + "..." : service.Description)</td>
-                        <td><span class="badge @service.IsActiveBadgeClass">@service.IsActiveDisplay</span></td>
-                        <td>@service.CreatedAt.ToString("yyyy-MM-dd")</td>
-                        <td>@(service.UpdatedAt.HasValue ? service.UpdatedAt.Value.ToString("yyyy-MM-dd") : "—")</td>
-                        <td>
-                            <a class="btn btn-sm btn-outline-primary"
-                               asp-area="Admin" asp-controller="Services" asp-action="Edit"
-                               asp-route-id="@service.Id">تعديل</a>
-                            @if (service.IsActive)
-                            {
-                                <form asp-area="Admin" asp-controller="Services" asp-action="Deactivate"
-                                      asp-route-id="@service.Id" method="post" class="d-inline">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn btn-sm btn-outline-danger"
-                                            onclick="return confirm('هل أنت متأكد من تعطيل هذه الخدمة؟')">تعطيل</button>
-                                </form>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-primary"><i class="bi bi-grid-1x2"></i></div>
+                <div class="stat-body">
+                    <div class="stat-number">@Model.Count</div>
+                    <div class="stat-label">إجمالي الخدمات</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-success"><i class="bi bi-check2-circle"></i></div>
+                <div class="stat-body">
+                    <div class="stat-number">@activeCount</div>
+                    <div class="stat-label">خدمات فعّالة</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-info"><i class="bi bi-pause-circle"></i></div>
+                <div class="stat-body">
+                    <div class="stat-number">@inactiveCount</div>
+                    <div class="stat-label">خدمات معطّلة</div>
+                </div>
+            </div>
+        </div>
     </div>
 }
-else
-{
-    <div class="empty-state">لا توجد خدمات حاليًا</div>
-}
+
+<div class="card-pro">
+    <div class="card-pro-header">
+        <h3><i class="bi bi-list-ul me-2 text-accent"></i>قائمة الخدمات</h3>
+    </div>
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table-pro">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>الاسم</th>
+                        <th>الوصف</th>
+                        <th>الحالة</th>
+                        <th>تاريخ الإنشاء</th>
+                        <th>آخر تحديث</th>
+                        <th class="text-center">إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < Model.Count; i++)
+                    {
+                        var service = Model[i];
+                        <tr>
+                            <td><span class="text-muted">@(i + 1)</span></td>
+                            <td><strong>@service.Name</strong></td>
+                            <td style="max-width: 300px;">
+                                <span class="text-muted" style="font-size: 0.9rem;">
+                                    @(service.Description.Length > 80 ? service.Description.Substring(0, 80) + "..." : service.Description)
+                                </span>
+                            </td>
+                            <td>
+                                @if (service.IsActive)
+                                {
+                                    <span class="badge badge-active">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        @service.IsActiveDisplay
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-inactive">
+                                        <i class="bi bi-pause-circle-fill"></i>
+                                        @service.IsActiveDisplay
+                                    </span>
+                                }
+                            </td>
+                            <td><i class="bi bi-calendar3 text-muted me-1"></i>@service.CreatedAt.ToString("yyyy-MM-dd")</td>
+                            <td>@(service.UpdatedAt.HasValue ? service.UpdatedAt.Value.ToString("yyyy-MM-dd") : "—")</td>
+                            <td class="text-center">
+                                <div class="d-inline-flex gap-1">
+                                    <a class="btn btn-sm btn-outline-primary"
+                                       asp-area="Admin" asp-controller="Services" asp-action="Edit"
+                                       asp-route-id="@service.Id">
+                                        <i class="bi bi-pencil"></i>
+                                        تعديل
+                                    </a>
+                                    @if (service.IsActive)
+                                    {
+                                        <form asp-area="Admin" asp-controller="Services" asp-action="Deactivate"
+                                              asp-route-id="@service.Id" method="post" class="d-inline m-0">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                    onclick="return confirm('هل أنت متأكد من تعطيل هذه الخدمة؟');">
+                                                <i class="bi bi-pause-circle"></i>
+                                                تعطيل
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state-pro" style="border: none; margin: 0;">
+            <i class="bi bi-grid-1x2 empty-icon"></i>
+            <h3>لا توجد خدمات حاليًا</h3>
+            <p class="mb-3">ابدأ بإضافة خدمات لعرضها في الموقع</p>
+            <a class="btn btn-primary" asp-area="Admin" asp-controller="Services" asp-action="Create">
+                <i class="bi bi-plus-lg"></i>
+                إضافة خدمة جديدة
+            </a>
+        </div>
+    }
+</div>

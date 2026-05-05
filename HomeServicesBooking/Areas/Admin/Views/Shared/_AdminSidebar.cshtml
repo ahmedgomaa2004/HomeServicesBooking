@@ -1,0 +1,50 @@
+@{
+    var routeCtrl = (ViewContext.RouteData.Values["controller"] as string)?.ToLower();
+    var isDashboard = routeCtrl == "dashboard";
+    var isOrders = routeCtrl == "orders";
+    var isServices = routeCtrl == "services";
+    var adminEmail = User.Identity?.Name ?? "Admin";
+    var initial = !string.IsNullOrEmpty(adminEmail) ? adminEmail.Substring(0, 1).ToUpper() : "A";
+}
+
+<aside class="admin-sidebar" id="adminSidebar">
+    <a class="sidebar-brand" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+        <span class="brand-icon"><i class="bi bi-shield-lock-fill"></i></span>
+        <span>
+            <div class="brand-name">خدمات منزلية</div>
+            <div class="brand-sub">لوحة التحكم</div>
+        </span>
+    </a>
+
+    <nav class="sidebar-nav">
+        <div class="nav-section-title">القائمة الرئيسية</div>
+        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="@(isDashboard ? "active" : "")">
+            <i class="bi bi-speedometer2"></i>
+            <span>لوحة التحكم</span>
+        </a>
+        <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="@(isOrders ? "active" : "")">
+            <i class="bi bi-receipt"></i>
+            <span>الطلبات</span>
+        </a>
+        <a asp-area="Admin" asp-controller="Services" asp-action="Index" class="@(isServices ? "active" : "")">
+            <i class="bi bi-grid-1x2"></i>
+            <span>الخدمات</span>
+        </a>
+
+        <div class="nav-section-title">روابط أخرى</div>
+        <a asp-area="" asp-controller="Home" asp-action="Index" target="_blank">
+            <i class="bi bi-box-arrow-up-left"></i>
+            <span>الموقع العام</span>
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="d-flex align-items-center gap-2">
+            <div class="avatar" style="width:32px;height:32px;border-radius:50%;background:rgba(201,169,97,0.18);color:var(--color-accent);display:inline-flex;align-items:center;justify-content:center;font-weight:600;">@initial</div>
+            <div style="min-width:0;flex:1;">
+                <div style="color:#fff;font-size:0.85rem;font-weight:500;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;">@adminEmail</div>
+                <div style="font-size:0.72rem;">مسؤول النظام</div>
+            </div>
+        </div>
+    </div>
+</aside>

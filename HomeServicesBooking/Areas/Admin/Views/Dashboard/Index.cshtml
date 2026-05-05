@@ -2,68 +2,159 @@
 
 @{
     ViewData["Title"] = "لوحة التحكم";
+
+    string StatusClass(string s) => s switch
+    {
+        "Pending" => "badge-status badge-pending",
+        "In Progress" => "badge-status badge-progress",
+        "Done" => "badge-status badge-done",
+        _ => "badge-status badge-inactive"
+    };
+
+    string StatusArabic(string s) => s switch
+    {
+        "Pending" => "جديد",
+        "In Progress" => "قيد التنفيذ",
+        "Done" => "مكتمل",
+        _ => s
+    };
+
+    var inProgressCount = Math.Max(0, Model.TotalOrdersCount - Model.PendingOrdersCount - Model.DoneOrdersCount);
 }
 
-<h1 class="h3 mb-4">لوحة التحكم</h1>
+<div class="page-header">
+    <div>
+        <h1>مرحبًا بعودتك 👋</h1>
+        <div class="page-subtitle">نظرة عامة على أداء النظام والطلبات</div>
+    </div>
+    <div>
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="Orders" asp-action="Index">
+            <i class="bi bi-receipt"></i>
+            عرض كل الطلبات
+        </a>
+    </div>
+</div>
 
 <div class="row g-3 mb-4">
-    <div class="col-md-4">
-        <div class="card admin-stat-card">
-            <div class="card-body text-center">
+    <div class="col-md-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon stat-icon-primary"><i class="bi bi-receipt"></i></div>
+            <div class="stat-body">
                 <div class="stat-number">@Model.TotalOrdersCount</div>
                 <div class="stat-label">إجمالي الطلبات</div>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card admin-stat-card">
-            <div class="card-body text-center">
-                <div class="stat-number text-warning">@Model.PendingOrdersCount</div>
+    <div class="col-md-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon stat-icon-warning"><i class="bi bi-hourglass-split"></i></div>
+            <div class="stat-body">
+                <div class="stat-number">@Model.PendingOrdersCount</div>
                 <div class="stat-label">طلبات جديدة</div>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card admin-stat-card">
-            <div class="card-body text-center">
-                <div class="stat-number text-success">@Model.DoneOrdersCount</div>
+    <div class="col-md-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon stat-icon-info"><i class="bi bi-arrow-repeat"></i></div>
+            <div class="stat-body">
+                <div class="stat-number">@inProgressCount</div>
+                <div class="stat-label">قيد التنفيذ</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon stat-icon-success"><i class="bi bi-check2-circle"></i></div>
+            <div class="stat-body">
+                <div class="stat-number">@Model.DoneOrdersCount</div>
                 <div class="stat-label">طلبات مكتملة</div>
             </div>
         </div>
     </div>
 </div>
 
-<h2 class="h5 mb-3">آخر 10 طلبات</h2>
-
-@if (Model.LatestOrders.Any())
-{
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle">
-            <thead class="table-light">
-                <tr>
-                    <th>اسم العميل</th>
-                    <th>الخدمة</th>
-                    <th>التاريخ</th>
-                    <th>الحالة</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var order in Model.LatestOrders)
-                {
-                    <tr>
-                        <td>@order.CustomerName</td>
-                        <td>@order.ServiceName</td>
-                        <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
-                        <td>
-                            <span class="badge @order.StatusBadgeClass">@order.Status</span>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <a class="card-pro d-block text-decoration-none" asp-area="Admin" asp-controller="Orders" asp-action="Index" style="color: inherit;">
+            <div class="card-pro-body d-flex align-items-center gap-3">
+                <div class="stat-icon stat-icon-primary"><i class="bi bi-receipt"></i></div>
+                <div>
+                    <div style="font-weight:600; color: var(--color-neutral-900);">إدارة الطلبات</div>
+                    <small class="text-muted">عرض، بحث، تحديث حالة الطلبات</small>
+                </div>
+                <i class="bi bi-chevron-left ms-auto text-muted"></i>
+            </div>
+        </a>
     </div>
-}
-else
-{
-    <div class="empty-state">لا توجد طلبات حاليًا</div>
-}
+    <div class="col-md-4">
+        <a class="card-pro d-block text-decoration-none" asp-area="Admin" asp-controller="Services" asp-action="Index" style="color: inherit;">
+            <div class="card-pro-body d-flex align-items-center gap-3">
+                <div class="stat-icon stat-icon-accent"><i class="bi bi-grid-1x2"></i></div>
+                <div>
+                    <div style="font-weight:600; color: var(--color-neutral-900);">إدارة الخدمات</div>
+                    <small class="text-muted">إضافة، تعديل، تعطيل الخدمات</small>
+                </div>
+                <i class="bi bi-chevron-left ms-auto text-muted"></i>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a class="card-pro d-block text-decoration-none" asp-area="" asp-controller="Home" asp-action="Index" target="_blank" style="color: inherit;">
+            <div class="card-pro-body d-flex align-items-center gap-3">
+                <div class="stat-icon stat-icon-info"><i class="bi bi-box-arrow-up-left"></i></div>
+                <div>
+                    <div style="font-weight:600; color: var(--color-neutral-900);">الموقع العام</div>
+                    <small class="text-muted">فتح الموقع في نافذة جديدة</small>
+                </div>
+                <i class="bi bi-chevron-left ms-auto text-muted"></i>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="card-pro">
+    <div class="card-pro-header">
+        <h3><i class="bi bi-clock-history me-2 text-accent"></i>آخر 10 طلبات</h3>
+        <a class="btn btn-ghost btn-sm" asp-area="Admin" asp-controller="Orders" asp-action="Index">
+            عرض الكل
+            <i class="bi bi-arrow-left"></i>
+        </a>
+    </div>
+    @if (Model.LatestOrders.Any())
+    {
+        <div class="table-responsive">
+            <table class="table-pro">
+                <thead>
+                    <tr>
+                        <th>اسم العميل</th>
+                        <th>الخدمة</th>
+                        <th>تاريخ الحجز</th>
+                        <th>الحالة</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model.LatestOrders)
+                    {
+                        <tr>
+                            <td><strong>@order.CustomerName</strong></td>
+                            <td>@order.ServiceName</td>
+                            <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                            <td>
+                                <span class="badge @StatusClass(order.Status)">@StatusArabic(order.Status)</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state-pro" style="border: none; margin: 0;">
+            <i class="bi bi-inbox empty-icon"></i>
+            <h3>لا توجد طلبات حاليًا</h3>
+            <p>ستظهر الطلبات الجديدة هنا فور إرسالها</p>
+        </div>
+    }
+</div>

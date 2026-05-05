@@ -2,17 +2,97 @@
 
 @{
     ViewData["Title"] = Model.Name;
+
+    string IconFor(string name) => name switch
+    {
+        var n when n.Contains("سباكة") => "bi-droplet-fill",
+        var n when n.Contains("كهرباء") => "bi-lightning-charge-fill",
+        var n when n.Contains("نجارة") => "bi-hammer",
+        var n when n.Contains("تكييف") => "bi-thermometer-half",
+        var n when n.Contains("دهان") => "bi-palette-fill",
+        var n when n.Contains("تنظيف") => "bi-stars",
+        _ => "bi-tools"
+    };
 }
 
-<div class="row justify-content-center">
-    <div class="col-lg-8">
-        <div class="details-panel">
-            <a class="text-decoration-none d-inline-block mb-3" asp-controller="Services" asp-action="Index">العودة للخدمات</a>
-            <h1 class="mb-3">@Model.Name</h1>
-            <p class="lead text-muted">@Model.Description</p>
-            <div class="d-flex gap-2 mt-4">
-                <a class="btn btn-primary btn-lg" asp-controller="Orders" asp-action="Create" asp-route-serviceId="@Model.Id">احجز الخدمة</a>
-                <a class="btn btn-outline-secondary btn-lg" asp-controller="Home" asp-action="Index">الرئيسية</a>
+<div class="container py-4">
+    <nav class="breadcrumb-pro">
+        <a asp-controller="Home" asp-action="Index"><i class="bi bi-house-door"></i> الرئيسية</a>
+        <span class="separator"><i class="bi bi-chevron-left"></i></span>
+        <a asp-controller="Services" asp-action="Index">الخدمات</a>
+        <span class="separator"><i class="bi bi-chevron-left"></i></span>
+        <span>@Model.Name</span>
+    </nav>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card-pro">
+                <div class="card-pro-body">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="service-icon" style="margin-bottom:0;">
+                            <i class="bi @IconFor(Model.Name)"></i>
+                        </div>
+                        <div>
+                            <h1 class="mb-1">@Model.Name</h1>
+                            <div class="page-subtitle">خدمة احترافية متاحة للحجز</div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <h5 class="mb-3"><i class="bi bi-card-text me-2 text-accent"></i>وصف الخدمة</h5>
+                    <p style="color: var(--color-neutral-700); line-height: 1.8; font-size: 1.02rem;">@Model.Description</p>
+
+                    <hr />
+
+                    <h5 class="mb-3"><i class="bi bi-list-check me-2 text-accent"></i>ما يميز هذه الخدمة</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start gap-2">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                <span>فنيون معتمدون وذوو خبرة</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start gap-2">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                <span>ضمان جودة العمل</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start gap-2">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                <span>استجابة سريعة للطلبات</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start gap-2">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                <span>أسعار مناسبة وشفافة</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card-pro" style="position: sticky; top: 90px;">
+                <div class="card-pro-body text-center">
+                    <i class="bi bi-calendar-check" style="font-size: 3rem; color: var(--color-accent);"></i>
+                    <h4 class="mt-3 mb-2">احجز الآن</h4>
+                    <p class="text-muted mb-4" style="font-size: 0.92rem;">املأ النموذج وسنتواصل معك في أقرب وقت</p>
+                    <div class="d-grid gap-2">
+                        <a class="btn btn-primary btn-lg" asp-controller="Orders" asp-action="Create" asp-route-serviceId="@Model.Id">
+                            <i class="bi bi-calendar-plus"></i>
+                            احجز هذه الخدمة
+                        </a>
+                        <a class="btn btn-outline-secondary" asp-controller="Services" asp-action="Index">
+                            <i class="bi bi-arrow-right"></i>
+                            العودة للخدمات
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
